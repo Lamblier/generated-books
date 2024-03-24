@@ -1,0 +1,33 @@
+version: '3.7'
+
+services:
+  h2-database:
+    image: oscarfonts/h2
+    ports:
+      - "8082:8082"
+    environment:
+      - H2_OPTIONS=-ifNotExists
+      - H2_TCP_ALLOW_OTHERS=true
+    volumes:
+      - h2-data:/data
+  books:
+    build: ./
+    container_name: "books-top-ten"
+    volumes:
+      - ./src/main/resources/books-data.csv:/src/main/resources/books-data.csv
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:h2:mem:books
+      SPRING_DATASOURCE_USERNAME: sa
+      SPRING_DATASOURCE_PASSWORD:
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.h2.Driver
+      SPRING_JPA_PROPERTIES_HIBERNATE_SHOW_SQL: "true"
+      SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL: "true"
+      SPRING_JPA_PROPERTIES_HIBERNATE_DDL_AUTO: create-drop
+      SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.H2Dialect
+      SPRING_JPA_DATABASE: h2
+    depends_on:
+      - h2-database
+volumes:
+  h2-data:

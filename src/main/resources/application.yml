@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:books
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    properties.hibernate:
+      show_sql: true
+      format_sql: true
+      ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.H2Dialect
+    database: h2
+
+app:
+  path: src/main/resources/books-data.csv
